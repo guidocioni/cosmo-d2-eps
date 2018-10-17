@@ -1,0 +1,77 @@
+#!/bin/bash
+. ~/functions_download_dwd.sh
+
+export NCARG_ROOT=/sw/jessie-x64/ncl-6.4.0-nodap-precompiled 
+export PATH=$NCARG_ROOT/bin:$PATH 
+
+export cdo=/sw/jessie-x64/cdo-1.8.0-gccsys/bin/cdo
+export python=/home/mpim/m300382/.conda/envs/my_env/bin/python
+
+export year=`date +"%Y"`
+export month=`date +"%m"`
+export day=`date +"%d"`
+export hour=`date +"%H"`
+export hour_no_zero=`date -u +"%-H"`
+
+if [ "$hour_no_zero" -ge 2 ] && [ "$hour_no_zero" -lt 5 ] 
+then 
+ run="00"
+elif [ "$hour_no_zero" -ge 5 ] && [ "$hour_no_zero" -lt 8 ] 
+then
+ run="03"
+elif [ "$hour_no_zero" -ge 8 ] && [ "$hour_no_zero" -lt 11 ] 
+then
+ run="06"
+elif [ "$hour_no_zero" -ge 11 ] && [ "$hour_no_zero" -lt 14 ] 
+then
+ run="09"
+elif [ "$hour_no_zero" -ge 14 ] && [ "$hour_no_zero" -lt 17 ] 
+then
+ run="12"
+elif [ "$hour_no_zero" -ge 17 ] && [ "$hour_no_zero" -lt 20 ] 
+then
+ run="15"
+elif [ "$hour_no_zero" -ge 20 ] && [ "$hour_no_zero" -lt 23 ] 
+then
+ run="18"
+elif [ "$hour_no_zero" -ge 23 ]
+then
+ run="21"
+fi
+
+export run
+
+cd /scratch/local1/m300382/cosmo_d2_eps
+rm *.grib2
+cp /home/mpim/m300382/cosmo_d2_eps/*.py ./
+
+
+#2-D variables
+export TASK_PYTHON_COSMO_D2_EPS="download_merge_2d_variable_cosmo_d2_eps"
+${python} task_parallelism_general.py t_2m vmax_10m tot_prec h_snow cape_ml clct
+
+#3-D variables
+# export TASK_PYTHON_COSMO_D2_EPS="download_merge_3d_variable_cosmo_d2_eps"
+# ${python} task_parallelism_general.py t
+
+${python} plot_tot_prec.py
+${python} plot_snow.py
+
+ncftpput -R -v altervista cosmod2_eps/prob_prec_5 prob_prec_5_*
+ncftpput -R -v altervista cosmod2_eps/prob_prec_10 prob_prec_10_*
+ncftpput -R -v altervista cosmod2_eps/prob_prec_50 prob_prec_50_*
+ncftpput -R -v altervista cosmod2_eps/prob_snow_10 prob_snow_10_*
+ncftpput -R -v altervista cosmod2_eps/prob_snow_50 prob_snow_50_*
+ncftpput -R -v altervista cosmod2_eps/prob_snow_100 prob_snow_100_*
+
+ncftpput -R -v altervista cosmod2_eps/it/prob_prec_5 it/prob_prec_5_*
+ncftpput -R -v altervista cosmod2_eps/it/prob_prec_10 it/prob_prec_10_*
+ncftpput -R -v altervista cosmod2_eps/it/prob_prec_50 it/prob_prec_50_*
+ncftpput -R -v altervista cosmod2_eps/it/prob_snow_10 it/prob_snow_10_*
+ncftpput -R -v altervista cosmod2_eps/it/prob_snow_50 it/prob_snow_50_*
+ncftpput -R -v altervista cosmod2_eps/it/prob_snow_100 it/prob_snow_100_*
+
+rm *.png
+rm it/*.png
+
+cd 
