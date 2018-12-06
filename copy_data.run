@@ -5,7 +5,10 @@ export NCARG_ROOT=/sw/jessie-x64/ncl-6.4.0-nodap-precompiled
 export PATH=$NCARG_ROOT/bin:$PATH 
 
 export cdo=/sw/jessie-x64/cdo-1.8.0-gccsys/bin/cdo
-export python=/home/mpim/m300382/.conda/envs/my_env/bin/python
+export python=/home/mpim/m300382/.conda/envs/my_base/bin/python
+
+export QT_QPA_PLATFORM=offscreen
+export DISPLAY=localhost:0
 
 export year=`date +"%Y"`
 export month=`date +"%m"`
@@ -48,12 +51,13 @@ cp /home/mpim/m300382/cosmo_d2_eps/*.py ./
 
 #2-D variables
 export TASK_PYTHON_COSMO_D2_EPS="download_merge_2d_variable_cosmo_d2_eps"
-${python} task_parallelism_general.py t_2m vmax_10m tot_prec h_snow cape_ml clct
+${python} task_parallelism_general.py t_2m vmax_10m tot_prec h_snow cape_ml clct snow_gsp
 
 #3-D variables
 # export TASK_PYTHON_COSMO_D2_EPS="download_merge_3d_variable_cosmo_d2_eps"
 # ${python} task_parallelism_general.py t
 
+source /sw/jessie-x64/anaconda2-4.1.1/bin/activate my_base
 ${python} plot_tot_prec.py
 ${python} plot_snow.py
 

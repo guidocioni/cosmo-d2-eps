@@ -11,7 +11,7 @@ main_folder='/scratch/local1/m300382/cosmo_d2_eps/'
 file_prefix='cosmo-d2-eps_germany_rotated-lat-lon'
 level_type='single-level'
 run=''
-variable='t_2m'
+variable='vmax_10m'
 
 number_ensembles=20
 nlat=716
@@ -24,13 +24,17 @@ variables_names={
     't_2m'  : 'Temperature',
     'u_10m' : 'u-component of wind',
     'v_10m' : 'v-component of wind',
-    'tot_prec' : 'Total precipitation rate'
+    'tot_prec' : 'Total precipitation rate',
+    'cape_ml'  : 'Convective available potential energy',
+    'vmax_10m'  : 'Wind speed'
 }
 variables_levels={
     't_2m'  : 2,
     'u_10m' : 10,
     'v_10m' : 10,
-    'tot_prec' : 0
+    'tot_prec' : 0,
+    'cape_ml' : 0,
+    'vmax_10m'  : 10
 }
 
 def read_coordinates(file=file_coordinates):
@@ -106,11 +110,11 @@ def read_variable_xr(main_folder=main_folder, file_prefix=file_prefix, run=run, 
     else:
         files= sorted(glob(main_folder+file_prefix+'_'+level_type+'_'+run+'*_00_'+variable+'.grib2'))
     
-    datasets = [xr.open_dataset(file, engine="pynio") for file in files]
+    datasets = xr.open_mfdataset(files, engine="cfgrib", concat_dim="time")
     
-    return(xr.concat(datasets, 'time'))
+    return(datasets)
     
-def read_dates(main_folder=main_folder, file_prefix=file_prefix, run=run, full=False):
+def read_dates(main_folder=main_folder, file_prefix=file_prefix, run=run, full=False, variable=variable):
     "Read dates from the list of files assuming that these will be the same number"
     
     if full:

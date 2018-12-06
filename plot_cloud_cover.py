@@ -8,7 +8,7 @@ lats, lons = read_coordinates()
 time=read_dates()
 
 # Read variables from files and time, this is common to all the script
-clct=read_variable_xr(variable='clct').TCDC_P1_L1_GRLL0
+clct=read_variable_xr(variable='clct').variables['clct'].load()
 
 
 fig = plt.figure(figsize=(8,10))

@@ -2,6 +2,7 @@
 from mpl_toolkits.basemap import Basemap  # import Basemap matplotlib toolkit
 import numpy as np
 from matplotlib.offsetbox import AnchoredText
+import matplotlib.colors as colors
 
 # Output folder for images 
 folder_images = "/scratch/local1/m300382/cosmo_d2_eps/"
@@ -39,7 +40,7 @@ def get_projection(projection="germany", countries=True, regions=False, labels=F
 
 # Annotation run, models 
 def annotation_run(ax, time, loc='upper right'):
-    at = AnchoredText('Run %s'% time[0].strftime('%Y%m%d %H'), 
+    at = AnchoredText('Run %s'% time[0].strftime('%Y%m%d %H UTC'), 
                       prop=dict(size=8), frameon=True, loc=loc)
     at.patch.set_boxstyle("round,pad=0.,rounding_size=0.1")
     ax.add_artist(at)
