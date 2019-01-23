@@ -1,3 +1,4 @@
+# Plots the probability of excess of certain thresholds in snow
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
@@ -31,7 +32,7 @@ for threshold in thresholds:
     probabilities = (np.sum(h_snow[:,:,:,:] > threshold, axis=1)/20.)*100.
     
     for i, date in enumerate(time):
-        cs = m.contourf(x, y, probabilities[i,:,:], np.linspace(0,100,11), cmap=new_cmap, extend="min")
+        cs = m.contourf(x, y, probabilities[i,:,:], np.linspace(10,100,10), cmap=new_cmap, extend="max")
 
         plt.title('Probability height snow>'+str(int(threshold))+' cm | '+date.strftime('%d %b %Y at %H UTC'))
         annotation_run(plt.gca(), time)
@@ -40,6 +41,8 @@ for threshold in thresholds:
             plt.colorbar(cs, orientation='horizontal', label='Probability [%]',fraction=0.046, pad=0.04)
         plt.savefig(folder_images+'prob_snow_%s_%s.png' % (int(threshold), cum_hour[i]),
                     dpi=dpi_resolution, bbox_inches='tight')
+        for coll in cs.collections: 
+            coll.remove()
         first=False
 
 plt.close('all')
@@ -55,7 +58,7 @@ for threshold in thresholds:
     probabilities = (np.sum(h_snow[:,:,:,:] > threshold, axis=1)/20.)*100.
     
     for i, date in enumerate(time):
-        cs = m.contourf(x, y, probabilities[i,:,:], np.linspace(0,100,11), cmap=new_cmap, extend="min")
+        cs = m.contourf(x, y, probabilities[i,:,:], np.linspace(10,100,10), cmap=new_cmap, extend="max")
 
         plt.title('Probability height snow>'+str(int(threshold))+' cm | '+date.strftime('%d %b %Y at %H UTC'))
         annotation_run(plt.gca(), time)
@@ -64,6 +67,8 @@ for threshold in thresholds:
             plt.colorbar(cs, orientation='horizontal', label='Probability [%]',fraction=0.046, pad=0.04)
         plt.savefig(folder_images+'it/prob_snow_%s_%s.png' % (int(threshold), i),
                     dpi=dpi_resolution, bbox_inches='tight')
+        for coll in cs.collections: 
+            coll.remove()
         first=False
 
 plt.close('all')

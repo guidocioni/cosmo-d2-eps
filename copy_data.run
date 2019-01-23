@@ -46,12 +46,13 @@ export run
 
 cd /scratch/local1/m300382/cosmo_d2_eps
 rm *.grib2
+rm *.idx
 cp /home/mpim/m300382/cosmo_d2_eps/*.py ./
 
 
 #2-D variables
 export TASK_PYTHON_COSMO_D2_EPS="download_merge_2d_variable_cosmo_d2_eps"
-${python} task_parallelism_general.py t_2m vmax_10m tot_prec h_snow cape_ml clct snow_gsp
+${python} task_parallelism_general.py t_2m vmax_10m tot_prec h_snow cape_ml clct prs_gsp
 
 #3-D variables
 # export TASK_PYTHON_COSMO_D2_EPS="download_merge_3d_variable_cosmo_d2_eps"
@@ -60,6 +61,7 @@ ${python} task_parallelism_general.py t_2m vmax_10m tot_prec h_snow cape_ml clct
 source /sw/jessie-x64/anaconda2-4.1.1/bin/activate my_base
 ${python} plot_tot_prec.py
 ${python} plot_snow.py
+${python} plot_prob_snow.py
 
 ncftpput -R -v altervista cosmod2_eps/prob_prec_5 prob_prec_5_*
 ncftpput -R -v altervista cosmod2_eps/prob_prec_10 prob_prec_10_*
@@ -67,6 +69,7 @@ ncftpput -R -v altervista cosmod2_eps/prob_prec_50 prob_prec_50_*
 ncftpput -R -v altervista cosmod2_eps/prob_snow_10 prob_snow_10_*
 ncftpput -R -v altervista cosmod2_eps/prob_snow_50 prob_snow_50_*
 ncftpput -R -v altervista cosmod2_eps/prob_snow_100 prob_snow_100_*
+ncftpput -R -v altervista cosmod2_eps/prob_snow_prec prob_snow_prec_*
 
 ncftpput -R -v altervista cosmod2_eps/it/prob_prec_5 it/prob_prec_5_*
 ncftpput -R -v altervista cosmod2_eps/it/prob_prec_10 it/prob_prec_10_*
@@ -74,6 +77,8 @@ ncftpput -R -v altervista cosmod2_eps/it/prob_prec_50 it/prob_prec_50_*
 ncftpput -R -v altervista cosmod2_eps/it/prob_snow_10 it/prob_snow_10_*
 ncftpput -R -v altervista cosmod2_eps/it/prob_snow_50 it/prob_snow_50_*
 ncftpput -R -v altervista cosmod2_eps/it/prob_snow_100 it/prob_snow_100_*
+ncftpput -R -v altervista cosmod2_eps/it/prob_snow_prec it/prob_snow_prec_*
+
 
 rm *.png
 rm it/*.png

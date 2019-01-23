@@ -3,6 +3,8 @@ from mpl_toolkits.basemap import Basemap  # import Basemap matplotlib toolkit
 import numpy as np
 from matplotlib.offsetbox import AnchoredText
 import matplotlib.colors as colors
+from matplotlib.colors import from_levels_and_colors
+import seaborn as sns
 
 # Output folder for images 
 folder_images = "/scratch/local1/m300382/cosmo_d2_eps/"
@@ -22,7 +24,9 @@ def get_projection(projection="germany", countries=True, regions=False, labels=F
         if labels:
             m.drawparallels(np.arange(-80.,81.,10), linewidth=0.2, labels=[True, False, False, True])
             m.drawmeridians(np.arange(-180.,181.,10), linewidth=0.2, labels=[True, False, False, True])
-            
+        img=m.arcgisimage(service='World_Shaded_Relief', xpixels = 1000, verbose= True)
+        img.set_alpha(0.8)
+
     elif projection=="italy":
         m = Basemap(projection='cyl', llcrnrlon=5, llcrnrlat=43.5,\
                urcrnrlon=15, urcrnrlat=48,  resolution='i')
@@ -35,7 +39,9 @@ def get_projection(projection="germany", countries=True, regions=False, labels=F
         if labels:
             m.drawparallels(np.arange(-80.,81.,10), linewidth=0.2, labels=[True, False, False, True])
             m.drawmeridians(np.arange(-180.,181.,10), linewidth=0.2, labels=[True, False, False, True])
-     
+        img=m.arcgisimage(service='World_Shaded_Relief', xpixels = 1000, verbose= True)
+        img.set_alpha(0.8)
+             
     return(m)
 
 # Annotation run, models 

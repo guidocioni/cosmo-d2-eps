@@ -4,7 +4,7 @@ import pygrib # import pygrib interface to grib_api
 import numpy as np 
 from glob import glob
 import pandas as pd
-import xarray as xr #also requires pyNio to read grib files 
+import xarray as xr
 
 # Default values for reader 
 main_folder='/scratch/local1/m300382/cosmo_d2_eps/'
