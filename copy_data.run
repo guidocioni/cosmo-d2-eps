@@ -1,11 +1,11 @@
 #!/bin/bash
 . ~/functions_download_dwd.sh
 
-export NCARG_ROOT=/sw/jessie-x64/ncl-6.4.0-nodap-precompiled 
-export PATH=$NCARG_ROOT/bin:$PATH 
-
-export cdo=/sw/jessie-x64/cdo-1.8.0-gccsys/bin/cdo
+export cdo=/sw/stretch-x64/cdo/cdo-1.9.6-gccsys/bin/cdo
 export python=/home/mpim/m300382/.conda/envs/my_base/bin/python
+export parallel=/home/mpim/m300382/.conda/envs/my_base/bin/parallel
+
+source /sw/stretch-x64/conda/anaconda3-5.3.0-python-3.7/bin/activate my_base
 
 export QT_QPA_PLATFORM=offscreen
 export DISPLAY=localhost:0
@@ -49,16 +49,14 @@ rm *.grib2
 rm *.idx
 cp /home/mpim/m300382/cosmo_d2_eps/*.py ./
 
+#2-D variables
+# export TASK_PYTHON_COSMO_D2_EPS="download_merge_2d_variable_cosmo_d2_eps"
+# ${python} task_parallelism_general.py t_2m vmax_10m tot_prec h_snow cape_ml clct prs_gsp
 
 #2-D variables
-export TASK_PYTHON_COSMO_D2_EPS="download_merge_2d_variable_cosmo_d2_eps"
-${python} task_parallelism_general.py t_2m vmax_10m tot_prec h_snow cape_ml clct prs_gsp
+variables=("t_2m" "vmax_10m" "tot_prec" "h_snow" "cape_ml" "clct" "prs_gsp")
+${parallel} -j 8 download_merge_2d_variable_cosmo_d2_eps ::: "${variables[@]}"
 
-#3-D variables
-# export TASK_PYTHON_COSMO_D2_EPS="download_merge_3d_variable_cosmo_d2_eps"
-# ${python} task_parallelism_general.py t
-
-source /sw/jessie-x64/anaconda2-4.1.1/bin/activate my_base
 ${python} plot_tot_prec.py
 ${python} plot_snow.py
 ${python} plot_prob_snow.py

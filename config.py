@@ -9,7 +9,7 @@ import seaborn as sns
 # Output folder for images 
 folder_images = "/scratch/local1/m300382/cosmo_d2_eps/"
 # Resolution of images 
-dpi_resolution = 100
+dpi_resolution = 120
 
 def get_projection(projection="germany", countries=True, regions=False, labels=False):
     if projection=="germany":
